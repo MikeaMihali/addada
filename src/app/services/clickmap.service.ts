@@ -2,62 +2,49 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject'; 
 import { HttpClient,HttpParams } from '@angular/common/http';
+import { icon,marker } from 'leaflet';
 @Injectable()
 export class ClickmapService {
   private subject=new Subject<any>();
-  private dummyarray:any[]=[];
-  private response:any;
-  private url="http://street-asset-manager-api.herokuapp.com/v1/all/";
+  private listofcam:any;
+  private address:any[]=[];
+  private markers:any[]=[];
+  private url="http://street-asset-manager-api.herokuapp.com/v1/all/category=camera";
   constructor(private http:HttpClient) {
-    this.dummyarray.push({
-      "cam_name":"cam1",
-      "city": "Chigaco",
-      "country": "US",
-      "lat": "41.94",
-      "long": "-87,65",
-      "source": "/fecnetwork/13661.flv/playlist.m3u8",
-      "img": "http://static.earthcam.com/cams/includes/images/offline_images/Wrigley_HD1.jpg"
-    });
-    this.dummyarray.push({
-      "cam_name":"cam2",
-      "city": "New Orlens",
-      "country": "US",
-      "lat": "29.98",
-      "long": "-90,06",
-      "source": "/fecnetwork/4282.flv/playlist.m3u8",
-      "img": "http://static.earthcam.com/cams/includes/images/offline_images/nola-balc-offline-1.jpg"
-    });
-   
-    this.dummyarray.push({
-      "cam_name":"cam3",
-      "city": "New Orleans",
-      "country": "US",
-      "lat": "29.98",
-      "long": "-90.06",
-      "source": "/fecnetwork/4281.flv/playlist.m3u8",
-      "img": "http://static.earthcam.com/cams/includes/images/offline_images/Karoake1_new.jpg"
-    });
- 
-    this.dummyarray.push({
-      "cam_name":"cam4",
-      "city": "Las Vegas",
-      "country": "US",
-      "lat": "30.08",
-      "long": "-115.17",
-      "source": "/fecnetwork/eclasvegas.flv/playlist.m3u8",
-      "img": "http://static.earthcam.com/cams/includes/images/offline_images/Vegas2.jpg"
-    });
-    this.http.get(this.url,{
-      params:new HttpParams().set('category','camera')
-    }).subscribe(response=>{
-      this.response=response;
+    this.http.get(this.url).subscribe(response=>{
+      this.listofcam=response;
+      for(let cam of this.listofcam){
+        this.markers.push( marker([cam.location.x,cam.location.y],{
+         icon: icon({
+           iconSize: [ 25, 41 ],
+           iconAnchor: [ 13, 41 ],
+           iconUrl: 'assets/marker-icon.png',
+           shadowUrl: 'assets/marker-shadow.png'
+        })
+       }))
+      }
     });
    }
    updateList(){
-     this.subject.next(this.response);
-     console.log(this.response);
+    this.http.get(this.url).subscribe(response=>{
+      this.listofcam=response;
+      this.subject.next(this.listofcam);
+    });
+   }
+   testSearch(polygon:any){
+     let urltest="http://street-asset-manager-api.herokuapp.com/v1/all/search/geography";
+     this.http.post(urltest,{
+       params: new HttpParams().set('area',JSON.stringify(polygon)),
+       headers:{'Content-Type': 'application/json'}
+     },).subscribe(response=>{
+     // console.log(response);
+      console.log(JSON.stringify(polygon));
+    });
    }
    getUpdatedList():Observable<any>{
      return this.subject.asObservable();
+   }
+   addMarkers():any[]{
+     return this.markers;
    }
 }

@@ -12,6 +12,8 @@ import { DragScrollModule } from 'ngx-drag-scroll';
 import { PlaystreamService } from './services/playstream.service';
 import { ClickmapService } from './services/clickmap.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FooterComponent } from './components/footer/footer.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
     MapComponentComponent,
     GridviewComponent,
     NavbarComponent,
-    VideoplayerComponent
+    VideoplayerComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

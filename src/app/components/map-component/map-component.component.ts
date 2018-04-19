@@ -1,9 +1,8 @@
 import { Component, ChangeDetectorRef ,style,OnInit, NgZone } from '@angular/core';
 import * as L from 'leaflet';
-import { Map ,geoJSON,Layer,LatLngBounds,control,latLng,tileLayer } from 'leaflet';
+import { Map ,geoJSON,Layer,LatLngBounds,control,latLng,tileLayer,marker,icon } from 'leaflet';
 import { GeoJson } from './GeoJson';
 import { ClickmapService } from '../../services/clickmap.service';
-
 @Component({
   selector: 'app-map-component',
   templateUrl: './map-component.component.html',
@@ -14,6 +13,7 @@ export class MapComponentComponent implements OnInit {
   googleMaps:any;
   options:any;
   fitBounds:any;
+  layers:any[]=[];
   constructor(private changedetector:ChangeDetectorRef,
               private clickservice:ClickmapService) {
   }
@@ -29,6 +29,20 @@ export class MapComponentComponent implements OnInit {
       zoom: 7,
       center: latLng([ 41.1533, 20.1683 ])
     };
+    // let i=0;
+    // while(i<3){
+    //   this.layers.push( marker([41.1533+i,20.163],{
+    //     icon: icon({
+    //       iconSize: [ 25, 41 ],
+    //       iconAnchor: [ 13, 41 ],
+    //       iconUrl: 'assets/marker-icon.png',
+    //       shadowUrl: 'assets/marker-shadow.png'
+    //    })
+    //   }));
+    //   i++;
+
+    // }
+    this.layers=this.clickservice.addMarkers();
     //console.log(this.circle);
   }
 
@@ -37,7 +51,9 @@ export class MapComponentComponent implements OnInit {
         layer.on('click',<LeafletMouseEvent>(e)=>{
           that.fitBounds = e.target.getBounds();
           that.changedetector.detectChanges();
-          that.clickservice.updateList();
+         that.clickservice.updateList();
+         //console.log(feature);
+       // that.clickservice.testSearch(feature);
         });
         layer.on('mouseover',<LeafletMouseEvent>(e)=>{
           layer.setStyle({

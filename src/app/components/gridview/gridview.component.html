@@ -3,9 +3,8 @@
   <app-videoplayer></app-videoplayer>
 </div>
 <br>
-
 <div *ngIf="listofcam; else message">
- <!-- <div *ngIf="selected">
+ <div *ngIf="selected">
      <div class="col-lg-12" >
     <table class="table table-hover table-dark">
       <tr>
@@ -22,22 +21,21 @@
       </tr>
     </table>
   </div>
- </div> -->
+ </div>
 
-  <div class="col-lg-12" align="center">
+  <div class="col-lg-12" align="center" style="max-width:57%;">
     <br>
   <div dragScroll  drag-scroll-disabled=true	#nav>
-    <div style="display:inline-block;" *ngFor="let element of listofcam">
+    <div class="col-lg-4" style="display:inline-block;" *ngFor="let element of listofcam; let i=index;">
       <div class="imgcontainer">
       <img class="image" src="{{ element.specificProperties.image }}" width="300" height="200">
       <div class="overlay">
-          <a href="#" class="icon" (click)="selectCam(element)">
+          <a href="#" class="icon" (click)="selectCam(i)">
             <i class="fa fa-play-circle" aria-hidden="true"></i>
           </a>
       </div>
       </div>
-      <p>{{ getCity(42.65,19.34) }}</p>
-      <!-- <p class="text-left" style="font-weight:bold;">{{element.city}},{{element.country}}</p> -->
+      <p class="text-left" style="font-weight:bold;">{{listofcity[i].geonames[0].name}},{{listofcity[i].geonames[0].countryName}}</p>
       <!-- <button class="btn btn-default" (click)=setSource()>Play</button> -->
     </div>
    
@@ -53,5 +51,4 @@
       <p style="font-size:18px;letter-spacing:1px;" class="text-success">Select a zone from the map to list available cameras</p>
     </div>
 </ng-template>
-
 
