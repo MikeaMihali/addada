@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NgZone} from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AppComponent } from './app.component';
@@ -28,7 +28,8 @@ import { FooterComponent } from './components/footer/footer.component';
     BrowserModule,
     LeafletModule.forRoot(),
     DragScrollModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
     
   ],
   providers: [PlaystreamService,ClickmapService],

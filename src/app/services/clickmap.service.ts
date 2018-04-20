@@ -25,8 +25,14 @@ export class ClickmapService {
       }
     });
    }
-   updateList(){
-    this.http.get(this.url).subscribe(response=>{
+   updateList(criteria:string){
+    let url="http://street-asset-manager-api.herokuapp.com/v1/all/search";
+    let Params = new HttpParams();
+    Params=Params.append('q',criteria);
+    //Params=Params.append('category','camera');
+    this.http.get(url,{
+      params:Params
+    }).subscribe(response=>{
      this.listofcam=response;
      let url="http://api.geonames.org/findNearbyPlaceNameJSON";
      let temp:any;

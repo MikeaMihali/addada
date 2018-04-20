@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef ,style,OnInit, NgZone } from '@angular/core';
 import * as L from 'leaflet';
 import { Map ,geoJSON,Layer,LatLngBounds,control,latLng,tileLayer,marker,icon } from 'leaflet';
-import { GeoJson } from './GeoJson';
+import { UsGeojson } from './GeoJson';
 import { ClickmapService } from '../../services/clickmap.service';
 @Component({
   selector: 'app-map-component',
@@ -20,14 +20,14 @@ export class MapComponentComponent implements OnInit {
 
   ngOnInit() {
     this.googleMaps = tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-      maxZoom: 20,
+      maxZoom: 18,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       detectRetina: true
     });
    this.options = {
       layers: [ this.googleMaps],
-      zoom: 7,
-      center: latLng([ 41.1533, 20.1683 ])
+      zoom: 4,
+      center: latLng([ 37.8, -96 ])
     };
     // let i=0;
     // while(i<3){
@@ -51,9 +51,9 @@ export class MapComponentComponent implements OnInit {
         layer.on('click',<LeafletMouseEvent>(e)=>{
           that.fitBounds = e.target.getBounds();
           that.changedetector.detectChanges();
-         that.clickservice.updateList();
-         //console.log(feature);
-       // that.clickservice.testSearch(feature);
+          that.clickservice.updateList(feature.properties.name);
+         console.log(feature.properties.name);
+       //that.clickservice.testSearch(feature);
         });
         layer.on('mouseover',<LeafletMouseEvent>(e)=>{
           layer.setStyle({
@@ -76,7 +76,7 @@ export class MapComponentComponent implements OnInit {
   }
 
   onMapReady(map:L.Map) {
-    L.geoJSON( GeoJson as any,
+    L.geoJSON( UsGeojson as any,
     {
       onEachFeature: this.onEachFeature.bind(this),
       style: () => ({ 
