@@ -27,6 +27,7 @@ private selected:any;
   constructor(private service:PlaystreamService,private updateservice:ClickmapService,private http:HttpClient) { 
       this.updateservice.getUpdatedList().subscribe(list=>{
         this.response=list;
+        this.selected=null;
       });
     
   }

@@ -4,8 +4,8 @@
 </div>
 <br>
 <div *ngIf="response; else message"  style="max-width:100%;">
- <div *ngIf="selected"  style="max-width: 100%;">
-     <div class="col-lg-12" >
+  <div class="col-lg-12" >
+   <div *ngIf="selected"  style="max-width: 100%;">
     <table class="table table-hover table-dark">
       <tr>
         <th>City</th>
@@ -29,8 +29,8 @@
     <div  style="display:inline-block; padding-right: 10px;" *ngFor="let element of response; let i=index;">
       <div class="imgcontainer">
       <img class="image" src="{{ element.apirefat.specificProperties.image }}" width="300" height="200">
-      <div class="overlay">
-          <a href="#" class="icon" (click)="selectCam(i)">
+      <div class="overlay" (click)="selectCam(i)">
+          <a href="#" class="icon">
             <i class="fa fa-play-circle" aria-hidden="true"></i>
           </a>
       </div>
@@ -42,6 +42,11 @@
               <button class="btn btn-link scroll left" (click)="moveLeft()"></button>
               <button class="btn btn-link scroll right" (click)="moveRight()" style="margin-left:90%;"></button>
           </div>
+     <div *ngIf="response.length==0">
+        <div class="card card-body bg-white">
+            <p style="font-size:18px;letter-spacing:1px;" class="text-danger">No available cameras</p>
+          </div>
+     </div>
   </div>
   
   </div>

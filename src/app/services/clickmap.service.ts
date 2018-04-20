@@ -9,7 +9,7 @@ export class ClickmapService {
   private listofcam:any;
   private markers:any[]=[];
   private test:any[]=[];
-  private url="http://street-asset-manager-api.herokuapp.com/v1/all/category=camera";
+  private url="http://street-asset-manager-api.herokuapp.com/v1/all/status=ACTIVE";
   constructor(private http:HttpClient) {
     this.http.get(this.url).subscribe(response=>{
       this.listofcam=response;
@@ -29,6 +29,7 @@ export class ClickmapService {
     let url="http://street-asset-manager-api.herokuapp.com/v1/all/search";
     let Params = new HttpParams();
     Params=Params.append('q',criteria);
+    //console.log(encodeURI(criteria));
     //Params=Params.append('category','camera');
     this.http.get(url,{
       params:Params
