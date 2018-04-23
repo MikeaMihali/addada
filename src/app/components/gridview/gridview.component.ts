@@ -1,8 +1,7 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild} from '@angular/core';
 import { DragScrollDirective } from 'ngx-drag-scroll';
 import { PlaystreamService } from '../../services/playstream.service';
 import { ClickmapService } from '../../services/clickmap.service';
-import { HttpClient,HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 @Component({
@@ -10,8 +9,9 @@ import 'rxjs/add/operator/map';
   templateUrl: './gridview.component.html',
   styleUrls: ['./gridview.component.css']
 })
-export class GridviewComponent implements OnInit {
+export class GridviewComponent implements OnInit{
 private response:any[];
+private criteria:string;
 // private listofcam:any[];
 // private listofcity:any[];
 private selected:any;
@@ -24,12 +24,8 @@ private selected:any;
   moveRight() {
     this.ds.moveRight();
   }
-  constructor(private service:PlaystreamService,private updateservice:ClickmapService,private http:HttpClient) { 
-      this.updateservice.getUpdatedList().subscribe(list=>{
-        this.response=list;
-        this.selected=null;
-      });
-    
+  constructor(private service:PlaystreamService,private updateservice:ClickmapService) { 
+   
   }
   selectCam(i:number){
     this.service.setSource("http://videos3.earthcam.com"+this.response[i].apirefat.specificProperties.source);
@@ -42,5 +38,13 @@ private selected:any;
     };
   }
   ngOnInit() {
+    this.updateservice.getUpdatedList().subscribe( list=>{
+      this.response=list;
+      this.selected=null;
+    // this.service.setSource("http://videos3.earthcam.com"+this.response[0].apirefat.specificProperties.source);              
+    });
+    this.updateservice.getCriteria().subscribe((criteria)=>{
+      this.criteria=criteria;
+    }); 
   }
 }
