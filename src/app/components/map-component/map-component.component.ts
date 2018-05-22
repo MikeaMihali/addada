@@ -51,8 +51,8 @@ export class MapComponentComponent implements OnInit {
         layer.on('click',<LeafletMouseEvent>(e)=>{
           that.fitBounds = e.target.getBounds();
           that.changedetector.detectChanges();
-          that.clickservice.updateList(feature.properties.name);
-         console.log(feature.properties.name);
+          that.clickservice.updateList(e.target.getBounds());
+         console.log(e.target.getBounds());
        //that.clickservice.testSearch(feature);
         });
         layer.on('mouseover',<LeafletMouseEvent>(e)=>{

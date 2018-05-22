@@ -11,13 +11,15 @@ export class ClickmapService {
   private listofcam:any;
   private markers:any[]=[];
   private test:any[]=[];
-  private url="http://street-asset-manager-api.herokuapp.com/v1/all/status=ACTIVE";
+  private url="http://street-asset-manager-api.herokuapp.com/v1/all/search?status=ACTIVE&category=camera";
   constructor(private http:HttpClient,private play:PlaystreamService) {
     this.http.get(this.url).subscribe(response=>{
-      this.listofcam=response;
+      // console.log(response);
+      this.listofcam=response.results;
       for(let cam of this.listofcam){
-        if(cam.location) {
-        this.markers.push( marker([cam.location.x,cam.location.y],{
+        console.log(cam.geoinfo.coordinates[0]);
+        if(cam.geoinfo) {
+        this.markers.push(marker([cam.geoinfo.coordinates[1],cam.geoinfo.coordinates[0]],{
          icon: icon({
            iconSize: [ 25, 41 ],
            iconAnchor: [ 13, 41 ],
@@ -31,22 +33,36 @@ export class ClickmapService {
       }
     });
    }
-   updateList(criteria:string){
-    let url="http://street-asset-manager-api.herokuapp.com/v1/all/search";
-    let Params = new HttpParams();
-    Params=Params.append('q',criteria);
+   updateList(criteria:any){
+     let url;
+     let Params;
+     if(typeof criteria === 'string'){
+          url="http://street-asset-manager-api.herokuapp.com//v1/all/search";
+          Params= new HttpParams();
+          Params=Params.append('q',criteria);
+      }
+     else 
+    {
+        url="http://street-asset-manager-api.herokuapp.com/v1/all/search/geography";
+        Params = new HttpParams();
+        Params=Params.append('points',criteria._northEast.lng);
+        Params=Params.append('points',criteria._northEast.lat);
+        Params=Params.append('points',criteria._southWest.lng);
+        Params=Params.append('points',criteria._southWest.lat);
+  }
     //console.log(encodeURI(criteria));
     //Params=Params.append('category','camera');
     this.http.get(url,{
       params:Params
     }).subscribe(response=>{
-     this.listofcam=response;
+      console.log(response);
+     this.listofcam=response.results;
      let url="http://api.geonames.org/findNearbyPlaceNameJSON";
      let temp:any;
         for(let cam of this.listofcam){
           let Params = new HttpParams();
-          Params=Params.append('lat',cam.location.x);
-          Params=Params.append('lng',cam.location.y);
+          Params=Params.append('lat',cam.geoinfo.coordinates[1]);
+          Params=Params.append('lng',cam.geoinfo.coordinates[0]);
           Params=Params.append('username','xhesina');
          // console.log(cam.location.x+" "+cam.location.y);
           this.http.get(url,{

@@ -25,7 +25,14 @@ private selected:any;
     this.ds.moveRight();
   }
   constructor(private service:PlaystreamService,private updateservice:ClickmapService) { 
-   
+    this.updateservice.getUpdatedList().subscribe( list=>{
+      this.response=list;
+      this.selected=null;
+    // this.service.setSource("http://videos3.earthcam.com"+this.response[0].apirefat.specificProperties.source);              
+    });
+    this.updateservice.getCriteria().subscribe((criteria)=>{
+      this.criteria=criteria;
+    }); 
   }
   selectCam(i:number){
     this.service.setSource("http://videos3.earthcam.com"+this.response[i].apirefat.specificProperties.source);
@@ -38,13 +45,5 @@ private selected:any;
     };
   }
   ngOnInit() {
-    this.updateservice.getUpdatedList().subscribe( list=>{
-      this.response=list;
-      this.selected=null;
-    // this.service.setSource("http://videos3.earthcam.com"+this.response[0].apirefat.specificProperties.source);              
-    });
-    this.updateservice.getCriteria().subscribe((criteria)=>{
-      this.criteria=criteria;
-    }); 
   }
 }
